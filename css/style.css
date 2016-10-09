@@ -1,0 +1,72 @@
+body {
+	background: url(http://i.imgur.com/hrZmZEy.jpg) no-repeat;
+	background-size: cover;
+	background-color: rgb(117,136,142);
+	color: white;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+.game {
+	margin: 50px auto;
+	width: 555px;
+}
+.score {
+	display: block;
+	text-align: center;
+	width: 100px;
+	margin: 10px;
+	font-size: 20px;
+	border: 1px dashed white;
+}
+.scoreLeft {
+	float:left;
+}
+.scoreRight {
+	float: right;
+	display: block;
+}
+#compScore, #myScore{
+	font-size: 48px;
+}
+.board {
+	width: 306px;
+	height: 306px;
+	display: inline-block;
+	text-align: center;
+	background: rgba(0,0,0,0.2);
+}
+.row {
+	float: left;
+}
+.cell {
+	width: 100px;
+	height: 100px;
+	border: 1px dashed white;
+	font-size: 80px;
+}
+
+.result {
+	text-align: center;
+	margin: 25px;
+	font-size: 36px;
+	border: 2px dashed white;
+	border-radius: 15px;
+	background: rgba(0,0,0,0.3);
+}
+
+.buttons {
+	text-align: center;
+
+}
+
+.buttons button {
+	height: 50px;
+	width: 100px;
+	font-size: 15px;
+	background: rgba(0,0,0,0.3);
+	color: white;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+.hidden {
+	visibility: hidden;
+}
