@@ -1,5 +1,5 @@
 var states = ["START", "RETURN", "RESTART", "CONTINUE"];
-var state = 0; // 0 start/reseted, ! choose player, 2 started, 2 continue
+var state = 0; // 0 start/reseted, 1 choose player, 2 started, 2 continue
 var field = [
 	["", "", ""],
 	["", "", ""],
