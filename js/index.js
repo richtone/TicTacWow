@@ -281,11 +281,7 @@ $("#1").click(function() {
 		case 0:
 			break;
 		case 1:
-			my = char1;
-			comp = char2;
-			state = 2;
-			$(".side").addClass("hidden");
-			if (mode === 0) doge();
+			setSide(char1,char2);
 			break;
 	}
 });
@@ -310,18 +306,27 @@ $("#2").click(function(event) {
 $("#3").click(function() {
 	switch (state) {
 		case 0: // reseted
-			if (mode === 0) mode = 1;
-			else mode = 0;
-			$("#3").html(modes[mode]);
+			switchMode();
 			break;
 		case 1: // started
-			my = char2;
-			comp = char1;
-			state = 2;
-			$(".side").addClass("hidden");
+			setSide(char2,char1);
 			break;
 	}
 });
+
+function setSide(p1Char,p2Char) {
+	my = p1Char;
+	comp = p2Char;
+	state = 2;
+	$(".side").addClass("hidden");
+	if (mode === 0 && my == char1) doge();
+}
+
+function switchMode() {
+	if (mode === 0) mode = 1;
+	else mode = 0;
+	$("#3").html(modes[mode]);
+}
 
 
 $(".cell").click(function(event) {
