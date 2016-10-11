@@ -25,23 +25,47 @@ function pvp() {
 function doge() {
 	var a, b, i, j, k, tempField;
 	countWeights();
-	// console.log(field, weights);
+	console.log(diff, field, weights);
 	if (gameEval() > 0) return; // vyhodnotiť stav pred comp ťahom
 
 	// -- Herný postup --
 	switch (diff) {
 		case 0:
+			easy();
 			break;
 		case 1:
 			medium();
 			break;
 		case 2:
+			hard();
 			break;
 	}
 
 	countWeights();
 	gameEval(); // vyhodnotiť stav po comp ťahu
 
+}
+
+function easy() {
+	var a, b, i, j, k, tempField;
+
+	if (weights.indexOf(-2) > -1) { // ak sú niekde 2 počítačove v čiare
+		thirdInRow(weights.indexOf(-2));
+	} else if (weights.indexOf(2) > -1) { // ak sú niekde 2 hráčove v čiare
+		thirdInRow(weights.indexOf(2));
+	} else {
+		tempField = [];
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				if (field[i][j] === "") tempField.push([i, j]); // vyrobíme pole z prázdnych políčok
+			}
+		}
+		k = Math.floor(Math.random() * tempField.length); // vyberieme náhodný prvok pola
+		a = tempField[k][0];
+		b = tempField[k][1];
+		field[a][b] = comp;
+		$("#" + a + b).html(comp);
+	}
 }
 
 
@@ -56,26 +80,57 @@ function medium() {
 	} else if (weights.indexOf(2) > -1) { // ak sú niekde 2 hráčove v čiare
 		thirdInRow(weights.indexOf(2));
 	} else {
-		try {
-			tempField = [];
-
-			for (i = 0; i < 3; i++) {
-				for (j = 0; j < 3; j++) {
-					if (field[i][j] === "") tempField.push([i, j]); // vyrobíme pole z prázdnych políčok
-				}
+		tempField = [];
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				if (field[i][j] === "") tempField.push([i, j]); // vyrobíme pole z prázdnych políčok
 			}
-
-			k = Math.floor(Math.random() * tempField.length); // vyberieme náhodný prvok pola
-			a = tempField[k][0];
-			b = tempField[k][1];
-			field[a][b] = comp;
-			$("#" + a + b).html(comp);
-		} catch (e) {
-			$("#result").html(e);
 		}
+		k = Math.floor(Math.random() * tempField.length); // vyberieme náhodný prvok pola
+		a = tempField[k][0];
+		b = tempField[k][1];
+		field[a][b] = comp;
+		$("#" + a + b).html(comp);
 	}
 }
 
+
+function hard() {
+	var a, b, i, j, k, tempField;
+
+	if (weights.indexOf(-2) > -1) { // ak sú niekde 2 počítačove v čiare
+		thirdInRow(weights.indexOf(-2));
+	} else if (weights.indexOf(2) > -1) { // ak sú niekde 2 hráčove v čiare
+		thirdInRow(weights.indexOf(2));
+	} else if (field[1][1] === "") { // ak je stred prázdny
+		field[1][1] = comp;
+		$("#11").html(comp);
+	} else if (field[0][0] == "" || field[0][2] == "" || field[2][0] == "" || field[2][2] == "") {
+
+		do {
+			if (Math.random() < 0.5) a = 0;
+			else a = 2;
+			if (Math.random() < 0.5) b = 0;
+			else b = 2;
+			console.log(a, b);
+		} while (field[a][b] !== "")
+
+		field[a][b] = comp;
+		$("#" + a + b).html(comp);
+	} else {
+		tempField = [];
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				if (field[i][j] === "") tempField.push([i, j]); // vyrobíme pole z prázdnych políčok
+			}
+		}
+		k = Math.floor(Math.random() * tempField.length); // vyberieme náhodný prvok pola
+		a = tempField[k][0];
+		b = tempField[k][1];
+		field[a][b] = comp;
+		$("#" + a + b).html(comp);
+	}
+}
 
 function gameEval() { // vyhodnotiť stav hry
 	var resultTextTie, resultTextWin, resultTextLose;
@@ -263,8 +318,7 @@ function continueGame() {
 	if (my == char1) {
 		if (mode === 0) {
 			doge();
-		}
-		else pvp();
+		} else pvp();
 	}
 }
 
@@ -278,13 +332,29 @@ function switchPlayers() {
 	}
 }
 
+function switchDiff() {
+	switch (diff) {
+		case 0:
+			diff = 1;
+			break;
+		case 1:
+			diff = 2;
+			break;
+		case 2:
+			diff = 0;
+			break;
+	}
+	$("#1").html(diffs[diff]);
+}
+
 
 $("#1").click(function() {
 	switch (state) {
 		case 0:
+			switchDiff();
 			break;
 		case 1:
-			setSide(char1,char2);
+			setSide(char1, char2);
 			break;
 	}
 });
@@ -312,13 +382,13 @@ $("#3").click(function() {
 			switchMode();
 			break;
 		case 1: // started
-			setSide(char2,char1);
+			setSide(char2, char1);
 			break;
 	}
 });
 
 
-function setSide(p1Char,p2Char) {
+function setSide(p1Char, p2Char) {
 	my = p1Char;
 	comp = p2Char;
 	state = 2;
@@ -332,8 +402,7 @@ function switchMode() {
 		mode = 1;
 		$("#p1name").html("Doge 1");
 		$("#p2name").html("Doge 2");
-	}
-	else {
+	} else {
 		mode = 0;
 		$("#p1name").html("You");
 		$("#p2name").html("Doge");
