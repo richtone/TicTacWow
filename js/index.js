@@ -14,12 +14,12 @@ var char1 = "W";
 var char2 = "O";
 var modes = ["1 vs Doge", "1 vs 1"];
 var mode = 0;
+var turn = "my";
 
 function pvp() {
-	console.log(my, comp);
 	countWeights();
 	if (gameEval() > 0) return;
-	switchPlayers();
+	//switchPlayers();
 }
 
 function doge() {
@@ -77,12 +77,6 @@ function medium() {
 }
 
 
-function steamRoll() {
-	return field.reduce(function(a, b) { // jednorozmerné pole field
-		return a.concat(b);
-	}, []);
-}
-
 function gameEval() { // vyhodnotiť stav hry
 	var resultTextTie, resultTextWin, resultTextLose;
 
@@ -124,6 +118,13 @@ function gameOver() {
 	state = 3;
 	$("#2").html(states[state]);
 	$(".result").removeClass("hidden");
+}
+
+
+function steamRoll() {
+	return field.reduce(function(a, b) { // jednorozmerné pole field
+		return a.concat(b);
+	}, []);
 }
 
 
@@ -249,7 +250,7 @@ function resetGame() {
 }
 
 function continueGame() {
-	state = 1;
+	state = 2;
 	setField([
 		["", "", ""],
 		["", "", ""],
@@ -258,9 +259,11 @@ function continueGame() {
 	$("#2").html(states[state]);
 	$(".cell").html("");
 	$(".result").addClass("hidden");
-	switchPlayers();
+	if (mode === 0) switchPlayers();
 	if (my == char1) {
-		if (mode === 0) doge();
+		if (mode === 0) {
+			doge();
+		}
 		else pvp();
 	}
 }
@@ -314,6 +317,7 @@ $("#3").click(function() {
 	}
 });
 
+
 function setSide(p1Char,p2Char) {
 	my = p1Char;
 	comp = p2Char;
@@ -322,19 +326,36 @@ function setSide(p1Char,p2Char) {
 	if (mode === 0 && my == char1) doge();
 }
 
+
 function switchMode() {
-	if (mode === 0) mode = 1;
-	else mode = 0;
+	if (mode === 0) {
+		mode = 1;
+		$("#p1name").html("Doge 1");
+		$("#p2name").html("Doge 2");
+	}
+	else {
+		mode = 0;
+		$("#p1name").html("You");
+		$("#p2name").html("Doge");
+	}
 	$("#3").html(modes[mode]);
 }
 
 
 $(".cell").click(function(event) {
+	console.log(turn, field, weights, state, mode);
 	if (state == 2 && $(this).html() === "") {
-		$(this).html(my);
-		if (mode === 0) {
+		if (mode === 0) { // vs Doge
+			$(this).html(my);
 			doge();
-		} else {
+		} else { // 1 vs 1
+			if (turn == "my") {
+				$(this).html(my);
+				turn = "comp";
+			} else {
+				$(this).html(comp);
+				turn = "my";
+			}
 			pvp();
 		}
 	}
@@ -348,6 +369,7 @@ function refresh() {
 		}
 	}
 }
+
 
 $("document").ready(function() {
 	$("#1").html(diffs[diff]);
